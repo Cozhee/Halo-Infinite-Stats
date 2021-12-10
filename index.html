@@ -16,12 +16,21 @@
         .card {
             background-color: #430891;
             color: white;
+            box-shadow: 5px 5px 5px #888888;
+            margin-left: 20px;
+            border-radius: 15px 0px 15px 0px;
         }
         .card-text {
             margin-bottom: 0;
         }
+        .player-name {
+            margin-left: 20px;
+        }
         [v-cloak] {
             display: none;
+        }
+        #time-played {
+            font-weight: bold;
         }
     </style>
 
@@ -30,7 +39,7 @@
         <div class="d-flex justify-content-center">
             <div class="input-group mt-3">
                 <input v-model="playerName" type="text" class="form-control" placeholder="Enter Gamertag">
-                <button @click="getPlayerStats" class="btn btn-outline-secondary" type="button" id="button-addon2">Search for Player</button>
+                <button @click="getPlayerStats(playerName)" class="btn btn-outline-secondary" type="button" id="button-addon2">Search for Player</button>
             </div>
         </div>
 
@@ -40,33 +49,54 @@
             </div>
         </div>
 
-        <div class="d-flex justify-content-center mt-5">
-            <div v-if="playerData.length > 1">
-                <h2 class="card-title">{{ playerName }}</h2>
-                <hr>
-                <div v-for="(player, index) in playerData" class="card mb-3" style="max-width: 540px;">
-                    <div class="row g-0">
-                    <div class="col-md-4">
-                        <img :src="player.response.current.tier_image_url"
-                        class="img-fluid rounded-start" alt="...">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
+        <div v-if="playerData.length > 1" class="d-flex justify-content-center mt-5">
+            <div v-for="(player, index) in playerData" :key="index" class="card mb-3" style="width: 300px;">
+                <div class="row g-0">
+                <div class="col-md-4">
+                    <img :src="player.response.current.tier_image_url"
+                    class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
                         <p class="card-text">Queue: {{ player.queue }}</p>
                         <p class="card-text">Input: {{ player.input }}</p>
                         <p class="card-text">CSR: {{ player.response.current.value }}</p>
-                        <p class="card-text">Tier: {{ player.response.current.tier }}</p>
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        </div>
-                    </div>
+                        <p class="card-text">Tier: {{ player.response.current.tier }}</p>                        
                     </div>
                 </div>
+                </div>
             </div>
-            <div v-else-if="playerData.length == 0">
-                <h1>Welcome! :)</h1>
+        </div>
+        <div v-if="serviceRecord.time_played" class="d-flex justify-content-center" id="time-played">
+            <div id="" class="form-text">
+                <p>Time Played: {{ serviceRecord.time_played.human }}</p>
             </div>
-            <div v-else>
-                <h1>Sorry, no results found for {{ playerName }}</h1>
+        </div>
+        <hr>
+        <div v-if="
+        serviceRecord.damage && 
+        serviceRecord.breakdowns.matches" 
+        class="d-flex">
+            <div class="card mb-3" style="max-width: 540px;">  
+                <div class="col-md-8">
+                    <div class="card-body">
+                    <p class="card-text">Damage: {{ serviceRecord.damage.dealt }}</p>
+                    </div>
+                </div>  
+            </div>
+            <div class="card mb-3" style="max-width: 540px;">  
+                <div class="col-md-8">
+                    <div class="card-body">
+                    <p class="card-text">Taken: {{ serviceRecord.damage.taken }}</p>
+                    </div>
+                </div>  
+            </div>
+            <div class="card mb-3" style="max-width: 540px;">  
+                <div class="col-md-8">
+                    <div class="card-body">
+                    <p class="card-text">KDR: {{ playerKDR }} </p>
+                    </div>
+                </div>  
             </div>
         </div>
     </div>
@@ -76,14 +106,19 @@
         let app = Vue.createApp({
             data() {
                 return {
+                    playerKDR: 0,
                     playerName: '',
+                    gamertag: [],
                     playerData: [],
+                    serviceRecord: [],
                     haloApiToken: 'S10bwZipayUbAYawyedLzafZROnYYRcIIdgbcmT2sBDzyAd3TK64xETxqxJm7wDC', 
                 }
             },
             methods: {
                 async getPlayerStats() {
                     baseUrl = 'https://cryptum.halodotapi.com/games/hi/stats/players/' + this.playerName + '/csrs?season=1'
+                    serviceRecordUrl = 'https://cryptum.halodotapi.com/games/hi/stats/players/' + this.playerName + '/service-record/global'
+
                     const options = {
                         json: true,
                         headers: {
@@ -92,14 +127,22 @@
                             'Cryptum-API-Version': '2.3-alpha',
                         }
                     }
-                    const res = await fetch(baseUrl, options)
-                    const { data } = await res.json()
-                    this.playerData = data
-                }
+                    const response = await fetch(baseUrl, options)
+                    const { data: dataOne } = await response.json()
+                    this.playerData = dataOne
+
+                    const res = await fetch(serviceRecordUrl, options)
+                    const { data: dataTwo } = await res.json()
+                    this.serviceRecord = dataTwo
+
+                    this.playerKDR = this.serviceRecord.kdr.toFixed(2)
+            
+                    console.log(this.serviceRecord)
+                    console.log(this.playerData)
+                },
             }
         })
-
         app.mount("#app")
-    </script>
+        </script>
 </body>
 </html>
