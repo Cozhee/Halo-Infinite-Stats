@@ -17,8 +17,14 @@
             background-color: #430891;
             color: white;
             box-shadow: 5px 5px 5px #888888;
-            margin-left: 20px;
+            margin-left:10px;
+            margin-right: 10px;
             border-radius: 15px 0px 15px 0px;
+        }
+        .home-page {
+            background-color: rgba(0, 0, 0, 0.842);
+            width: 50%;
+
         }
         .card-text {
             margin-bottom: 0;
@@ -44,7 +50,7 @@
         </div>
 
         <div class="d-flex justify-content-center">
-            <div id="" class="form-text">
+            <div class="form-text">
                 Username must be an existing Halo:Infine Xbox Live gamertag.
             </div>
         </div>
@@ -69,11 +75,12 @@
         </div>
         <div v-if="serviceRecord.time_played" class="d-flex justify-content-center" id="time-played">
             <div id="" class="form-text">
-                <p>Time Played: {{ serviceRecord.time_played.human }}</p>
+                <p>{{ gamertag }} Time Played: {{ serviceRecord.time_played.human }}</p>
             </div>
         </div>
         <hr>
         <div v-if="
+        !isFetching &&
         serviceRecord.damage && 
         serviceRecord.breakdowns.matches" 
         class="d-flex">
@@ -91,6 +98,12 @@
                     </div>
                 </div>  
             </div>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title"><b>Damage Taken</b></h5>
+                  <p class="card-text">{{ serviceRecord.damage.taken }}</p>
+                </div>
+              </div>
             <div class="card mb-3" style="max-width: 540px;">  
                 <div class="col-md-8">
                     <div class="card-body">
@@ -98,7 +111,37 @@
                     </div>
                 </div>  
             </div>
+            <div class="card mb-3" style="max-width: 540px;">  
+                <div class="col-md-8">
+                    <div class="card-body">
+                    <p class="card-text">Win Rate: {{ winRate }}% </p>
+                    </div>
+                </div>  
+            </div>
+            <div class="card mb-3" style="max-width: 540px;">  
+                <div class="col-md-8">
+                    <div class="card-body">
+                    <p class="card-text">Games played: {{ serviceRecord.matches_played }} </p>
+                    </div>
+                </div>  
+            </div>
+            <div class="card mb-3" style="max-width: 540px;">  
+                <div class="col-md-8">
+                    <div class="card-body">
+                    <p class="card-text">Kills: {{ serviceRecord.summary.kills }} </p>
+                    </div>
+                </div>  
+            </div>
         </div>
+        <div v-else class="mx-auto home-page card text-center">
+            <div class="card-header">
+              Welcome! :)
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">Halo Infinite Stats, powered by HaloDotAPI</h5>
+              <p class="card-text">Stats will be generated from the endpoints provided by halodotapi. Just enter a gamertag and search away! Requests will be limited to 100 calls (or searches) per hour.</p>
+            </div>
+          </div>
     </div>
     
     <script src="https://unpkg.com/vue@next"></script>
@@ -106,10 +149,12 @@
         let app = Vue.createApp({
             data() {
                 return {
+                    winRate: 0,
+                    isFetching: true,
                     playerKDR: 0,
                     playerName: '',
-                    gamertag: [],
                     playerData: [],
+                    gamertag: '',
                     serviceRecord: [],
                     haloApiToken: 'S10bwZipayUbAYawyedLzafZROnYYRcIIdgbcmT2sBDzyAd3TK64xETxqxJm7wDC', 
                 }
@@ -127,6 +172,9 @@
                             'Cryptum-API-Version': '2.3-alpha',
                         }
                     }
+
+                    this.gamertag = this.playerName
+
                     const response = await fetch(baseUrl, options)
                     const { data: dataOne } = await response.json()
                     this.playerData = dataOne
@@ -136,9 +184,12 @@
                     this.serviceRecord = dataTwo
 
                     this.playerKDR = this.serviceRecord.kdr.toFixed(2)
+                    this.winRate = this.serviceRecord.win_rate.toFixed(2)
             
                     console.log(this.serviceRecord)
                     console.log(this.playerData)
+
+                    this.isFetching = false
                 },
             }
         })
