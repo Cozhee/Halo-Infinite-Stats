@@ -101,7 +101,7 @@
                             <img src="./images/kills.png" class="card-img-top" alt="...">
                             <div class="card-body">
                             <h5 class="card-title">Kills</h5>
-                            <p class="card-text">{{ serviceRecord.summary.kills }}</p>
+                            <p class="card-text">{{ playerTotalKills }}</p>
                             </div>
                         </div>
                         <div class="card">
@@ -115,14 +115,14 @@
                             <img src="./images/damage.png" class="card-img-top" alt="...">
                             <div class="card-body">
                             <h5 class="card-title">Total Damage Dealt</h5>
-                            <p class="card-text">{{ serviceRecord.damage.dealt }}</p>
+                            <p class="card-text">{{ playerCommaDamage }}</p>
                             </div>
                         </div>
                         <div class="card">
                             <img src="./images/damage_taken.png" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <h5 class="card-title">Total Damage Taken</h5>
-                                <p class="card-text">{{ serviceRecord.damage.taken }}</p>
+                                <p class="card-text">{{ playerCommaDamageTaken }}</p>
                             </div>
                         </div>
                     </div>
@@ -186,6 +186,9 @@
         let app = Vue.createApp({
             data() {
                 return {
+                    playerCommaDamageTaken: 0,
+                    playerCommaDamage: 0,
+                    playerTotalKills: 0,
                     loading: false,
                     winRate: 0,
                     playerKDR: 0,
@@ -222,6 +225,19 @@
                     const res = await fetch(serviceRecordUrl, options)
                     const { data: dataTwo } = await res.json()
                     this.serviceRecord = dataTwo
+
+                    playerKills = this.serviceRecord.summary.kills
+                    fixedPlayerNumberKills = playerKills.toLocaleString()
+                    this.playerTotalKills = fixedPlayerNumberKills
+
+                    playerDamage = this.serviceRecord.damage.dealt
+                    fixedPlayerDamage = playerDamage.toLocaleString()
+                    this.playerCommaDamage = fixedPlayerDamage
+
+                    playerDamageTaken = this.serviceRecord.damage.taken
+                    fixedPlayerDamageTaken = playerDamageTaken.toLocaleString()
+                    this.playerCommaDamageTaken = fixedPlayerDamageTaken
+
 
                     this.playerKDR = this.serviceRecord.kdr.toFixed(2)
                     this.winRate = this.serviceRecord.win_rate.toFixed(2)
