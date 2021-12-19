@@ -2,3 +2,5 @@
 2. Catch when no playerfound in search []
 3. More/no pictures for stat cards [x]
 4. Mobile layout
+5. Dark / Light theme
+6. Search on enter key
