@@ -1,3 +1,4 @@
-1. add commas in number values
-2. Catch when no playerfound in search
-3. More/no pictures for stat cards
+1. add commas in number values [x]
+2. Catch when no playerfound in search []
+3. More/no pictures for stat cards [x]
+4. Mobile layout
