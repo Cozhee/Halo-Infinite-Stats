@@ -160,6 +160,27 @@
                     </div>
                 </div>
             </div>
+
+            <div class="container mt-5">
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">Outcome</th>
+                        <th scope="col">Map</th>
+                        <th scope="col">Kills</th>
+                        <th scope="col">Deaths</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="game in playerMatches">
+                            <th scope="row">{{ game.outcome }}</th>
+                            <td>{{ game.details.map.name }}</td>
+                            <td>{{ game.stats.summary.kills }}</td>
+                            <td>{{ game.stats.summary.deaths }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         </div>
         <div v-if="playerData.length == 0" class="mx-auto home-page card text-center">
@@ -186,6 +207,7 @@
         let app = Vue.createApp({
             data() {
                 return {
+                    playerMatches: [],
                     playerCommaDamageTaken: 0,
                     playerCommaDamage: 0,
                     playerTotalKills: 0,
@@ -206,6 +228,7 @@
 
                     baseUrl = 'https://cryptum.halodotapi.com/games/hi/stats/players/' + this.playerName + '/csrs?season=1'
                     serviceRecordUrl = 'https://cryptum.halodotapi.com/games/hi/stats/players/' + this.playerName + '/service-record/global'
+                    matchesUrl = 'https://cryptum.halodotapi.com/games/hi/stats/players/' + this.playerName + '/matches'
 
                     const options = {
                         json: true,
@@ -217,6 +240,11 @@
                     }
 
                     this.gamertag = this.playerName
+
+                    const matches = await fetch(matchesUrl, options)
+                    const { data: matchesPlayed } = await matches.json()
+                    this.playerMatches = matchesPlayed
+                    console.log(this.playerMatches)
 
                     const response = await fetch(baseUrl, options)
                     const { data: dataOne } = await response.json()
@@ -242,9 +270,6 @@
                     this.playerKDR = this.serviceRecord.kdr.toFixed(2)
                     this.winRate = this.serviceRecord.win_rate.toFixed(2)
             
-                    console.log(this.serviceRecord)
-                    console.log(this.playerData)
-
                     this.loading = false
                    
                 },
