@@ -98,28 +98,28 @@
                 <div class="row mt-4">
                     <div class="card-group">
                         <div class="card text-center">
-                            <img src="./images/kills.png" class="card-img-top" alt="...">
+                            
                             <div class="card-body">
                             <h5 class="card-title">Kills</h5>
                             <p class="card-text">{{ playerTotalKills }}</p>
                             </div>
                         </div>
                         <div class="card">
-                            <img src="./images/matches.jpg" class="card-img-top" alt="...">
+                            
                             <div class="card-body">
                             <h5 class="card-title">Matches Played</h5>
                             <p class="card-text">{{ serviceRecord.matches_played }}</p>
                             </div>
                         </div>
                         <div class="card">
-                            <img src="./images/damage.png" class="card-img-top" alt="...">
+                            
                             <div class="card-body">
                             <h5 class="card-title">Total Damage Dealt</h5>
                             <p class="card-text">{{ playerCommaDamage }}</p>
                             </div>
                         </div>
                         <div class="card">
-                            <img src="./images/damage_taken.png" class="card-img-top" alt="...">
+                            
                             <div class="card-body">
                                 <h5 class="card-title">Total Damage Taken</h5>
                                 <p class="card-text">{{ playerCommaDamageTaken }}</p>
@@ -130,31 +130,31 @@
                 <div class="row mt-4">
                     <div class="card-group">
                         <div class="card text-center">
-                            <img src="./images/kills.png" class="card-img-top" alt="...">
+                            
                             <div class="card-body">
                             <h5 class="card-title">KDR</h5>
                             <p class="card-text">{{ playerKDR }}</p>
                             </div>
                         </div>
                         <div class="card">
-                            <img src="./images/matches.jpg" class="card-img-top" alt="...">
+                            
                             <div class="card-body">
                             <h5 class="card-title">Win Rate</h5>
                             <p class="card-text">{{ winRate }}%</p>
                             </div>
                         </div>
                         <div class="card">
-                            <img src="./images/damage.png" class="card-img-top" alt="...">
+                            
                             <div class="card-body">
-                            <h5 class="card-title">Total Damage Dealt</h5>
-                            <p class="card-text">{{ serviceRecord.damage.dealt }}</p>
+                            <h5 class="card-title">Overall Accuracy</h5>
+                            <p class="card-text">{{ serviceRecord.shots.accuracy.toFixed(2) }}</p>
                             </div>
                         </div>
                         <div class="card" style="width:400px">
-                            <img src="./images/damage_taken.png" class="card-img-top" alt="...">
+                            
                             <div class="card-body">
-                                <h5 class="card-title">Total Damage Taken</h5>
-                                <p class="card-text">{{ serviceRecord.damage.taken }}</p>
+                                <h5 class="card-title">Assists</h5>
+                                <p class="card-text">{{ serviceRecord.summary.assists }}</p>
                             </div>
                         </div>
                     </div>
@@ -271,6 +271,9 @@
 
                     this.playerKDR = this.serviceRecord.kdr.toFixed(2)
                     this.winRate = this.serviceRecord.win_rate.toFixed(2)
+
+                    console.log(this.serviceRecord)
+              
             
                     this.loading = false
                    
