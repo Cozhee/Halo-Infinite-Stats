@@ -20,7 +20,7 @@
             box-shadow: 5px 5px 5px #888888;
             margin-left:10px;
             margin-right: 10px;
-            /* border-radius: 15px 0px 15px 0px; */
+            border-radius: 0px;
         }
         .home-page {
             background-color: rgba(0, 0, 0, 0.842);
@@ -31,7 +31,6 @@
         .card-group {
             text-align: center;
             margin-top: 3px;
-            border-radius: none;
         }
         .player-name {
             margin-left: 20px;
@@ -147,7 +146,7 @@
                             
                             <div class="card-body">
                             <h5 class="card-title">Overall Accuracy</h5>
-                            <p class="card-text">{{ serviceRecord.shots.accuracy.toFixed(2) }}</p>
+                            <p class="card-text">{{ serviceRecord.shots.accuracy.toFixed(2) }}%</p>
                             </div>
                         </div>
                         <div class="card">
