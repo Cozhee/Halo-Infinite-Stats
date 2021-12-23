@@ -175,16 +175,19 @@
                         <th scope="col">Date</th>
                         <th scope="col">Outcome</th>
                         <th scope="col">Map</th>
+                        <th scope="col">Gametype</th>
                         <th scope="col">Kills</th>
                         <th scope="col">Deaths</th>
                         <th scope="col">Accuracy</th>
                         </tr>
                     </thead>
                     <tbody>
+                        
                         <tr v-for="game in playerMatches">
                             <th scope="row">{{ game.played_at.slice(0, 10) }}</th>
                             <td>{{ game.outcome }}</td>
                             <td>{{ game.details.map.name }}</td>
+                            <td>{{ game.details.category.name }}</td>
                             <td>{{ game.stats.summary.kills }}</td>
                             <td>{{ game.stats.summary.deaths }}</td>
                             <td>{{ game.stats.shots.accuracy }}%</td>
