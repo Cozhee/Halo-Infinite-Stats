@@ -65,7 +65,7 @@
             <div class="input-group">
                 <input v-model="playerName" v-on:keyup.enter="getPlayerStats" type="text" class="form-control" placeholder="Enter Gamertag">
                 <button @click="getPlayerStats" class="btn btn-outline-secondary" type="button" id="button-addon2">Search for Player</button>
-                <button @click="darkMode" class="btn btn-outline-secondary" type="button" id="button-addon2">Dark Mode</button>
+                <button @click="darkMode" class="btn btn-outline-secondary" type="button" id="button-addon2">{{ lightOrDark}} Mode</button>
             </div>
         </div>
 
@@ -224,6 +224,7 @@
         let app = Vue.createApp({
             data() {
                 return {
+                    lightOrDark: 'Dark',
                     toDarkMode: false,
                     classname: 'dark-mode',
                     playerMatches: [],
@@ -297,7 +298,13 @@
                 },
                 darkMode() {
                     this.toDarkMode = !this.toDarkMode
+                    if (this.toDarkMode === true){
+                        this.lightOrDark = 'Light'
+                    } else {
+                        this.lightOrDark = 'Dark'
+                    }
                 }
+                
             }
         })
         app.mount("#app")
